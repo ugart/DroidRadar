@@ -263,7 +263,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleApiClient.Con
 
             val mapLatLng = map.getLocation()
 
-            if (userLocation.distanceTo(mapLatLng) <= (raio*1000) ) {
+            if (userLocation.distanceTo(mapLatLng) <= (raio * 1000)) {
 
                 when {
 

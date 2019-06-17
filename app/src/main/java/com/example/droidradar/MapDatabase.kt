@@ -19,7 +19,8 @@ abstract class MapDatabase : RoomDatabase() {
         private var instance: MapDatabase? = null //@Volatile dá acesso dessa property instance à todas as threads
 
         @Synchronized
-        fun getDatabaseInstance(context: Context): MapDatabase = instance ?: buildDatabase(context).also { instance = it }
+        fun getDatabaseInstance(context: Context): MapDatabase =
+            instance ?: buildDatabase(context).also { instance = it }
 
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(context.applicationContext, MapDatabase::class.java, "2mapdatabase")
@@ -63,9 +64,6 @@ abstract class MapDatabase : RoomDatabase() {
                     val breakSpeed = breakSpeedAndRadarType[1].split("@")
 
                     maximumSpeed = breakSpeed[1]
-//                    when {
-//                        breakSpeed[1] != "0" -> maximumSpeed = breakSpeed[0].trim()
-//                    }
 
                     val map = Map()
                     map.latitude = latitude
@@ -79,7 +77,6 @@ abstract class MapDatabase : RoomDatabase() {
             }
 
             database.daoMap().saveMap(arrayMapa)
-
 
         }
 

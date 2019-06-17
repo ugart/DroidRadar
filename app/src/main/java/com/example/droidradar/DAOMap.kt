@@ -14,8 +14,3 @@ interface DAOMap {
     fun listMaps(): List<Map>
 
 }
-//
-//object DAOMap {
-//
-//    fun listMaps(): List<>
-//}
