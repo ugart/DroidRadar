@@ -39,7 +39,8 @@ abstract class MapDatabase : RoomDatabase() {
             //Como o InputStream não é um reader, ele precisa ser transformado em um
             val inputStreamReader = InputStreamReader(mapFile, Charsets.UTF_8)
 
-            //Para garantir que o bufferedReader será fechado corretamente, funcionando como o try-with-resources funcionava no java
+            //Para garantir que o bufferedReader será fechado corretamente, funcionando como o try-with-resources funcionava no java, usa-se o "use"
+            //evita o bloco finally
             BufferedReader(inputStreamReader).use { bufferedReader ->
                 bufferedReader.lineSequence().forEach {
 
