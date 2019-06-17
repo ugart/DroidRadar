@@ -8,9 +8,14 @@ import androidx.room.Query
 interface DAOMap {
 
     @Insert
-    fun saveMap(map: Map)
+    fun saveMap(map: List<Map>)
 
     @Query("SELECT * FROM map")
     fun listMaps(): List<Map>
 
 }
+//
+//object DAOMap {
+//
+//    fun listMaps(): List<>
+//}

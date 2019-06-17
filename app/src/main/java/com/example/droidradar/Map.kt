@@ -3,6 +3,7 @@ package com.example.droidradar
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.android.gms.maps.model.LatLng
 
 @Entity
 class Map(
@@ -15,4 +16,7 @@ class Map(
     var radarType: String? = null,
     @ColumnInfo(name = "velocidade")
     var speed: String? = null
-)
+) {
+
+    fun getLocation() = LatLng(latitude!!.toDouble(), longitude!!.toDouble())
+}

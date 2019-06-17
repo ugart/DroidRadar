@@ -9,7 +9,7 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
-@Database(entities = [Map::class], version = 1)
+@Database(entities = [Map::class], version = 2)
 abstract class MapDatabase : RoomDatabase() {
 
     abstract fun daoMap(): DAOMap
@@ -22,16 +22,23 @@ abstract class MapDatabase : RoomDatabase() {
         fun getDatabaseInstance(context: Context): MapDatabase = instance ?: buildDatabase(context).also { instance = it }
 
         private fun buildDatabase(context: Context) =
-            Room.databaseBuilder(context.applicationContext, MapDatabase::class.java, "mapdatabase")
+            Room.databaseBuilder(context.applicationContext, MapDatabase::class.java, "2mapdatabase")
                 .addCallback(object : Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
-                        Thread(Runnable { databasePopulating(context, getDatabaseInstance(context)) }).start()
+
                     }
-                }).build()
+
+                    override fun onOpen(db: SupportSQLiteDatabase) {
+                        super.onOpen(db)
+                    }
+                })
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build()
 
         //método para popular o banco de dados com os dados vindos do meu arquivo csv
-        private fun databasePopulating(context: Context, database: MapDatabase) {
+        fun databasePopulating(context: Context, database: MapDatabase) {
             var mapFile: InputStream = context.resources.openRawResource(R.raw.maparadar)
             var arrayMapa: ArrayList<Map> = ArrayList()
             var maximumSpeed = ""
@@ -55,11 +62,10 @@ abstract class MapDatabase : RoomDatabase() {
 
                     val breakSpeed = breakSpeedAndRadarType[1].split("@")
 
-                    val breakKMHSpeed = breakSpeed[0].split(" ")
-
-                    when {
-                        breakKMHSpeed[0] != "0" -> maximumSpeed = breakKMHSpeed[0].trim()
-                    }
+                    maximumSpeed = breakSpeed[1]
+//                    when {
+//                        breakSpeed[1] != "0" -> maximumSpeed = breakSpeed[0].trim()
+//                    }
 
                     val map = Map()
                     map.latitude = latitude
@@ -72,9 +78,8 @@ abstract class MapDatabase : RoomDatabase() {
                 }
             }
 
-            arrayMapa.forEach { map ->
-                database.daoMap().saveMap(map)
-            }
+            database.daoMap().saveMap(arrayMapa)
+
 
         }
 
